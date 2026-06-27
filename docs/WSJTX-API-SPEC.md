@@ -96,7 +96,8 @@ Out: `Id` only. In: `Id` · `Window` quint8 (0 Band Activity, 1 Rx Freq, 2 both)
 `Id` · `Time` QTime · `snr` qint32 · `Delta time` double ·
 `Delta frequency` quint32 · `Mode` utf8 · `Message` utf8 · `Low confidence` bool ·
 `Modifiers` quint8. Must exactly match a prior CQ/QRZ decode; ≡ double-click.
-**Initiates TX.**
+**Initiates TX.** Full auto-completion of the QSO requires WSJT-X **"Auto Seq"**
+ON (not UDP-controllable); with it off, only the first transmission is sent.
 
 ### 5 · QSOLogged — Out — observe · **D**
 `Id` · `Date & Time Off` QDateTime · `DX call` · `DX grid` ·

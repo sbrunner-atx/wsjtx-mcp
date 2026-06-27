@@ -217,7 +217,9 @@ def reply(
 
     Equivalent to double-clicking that decode in the Band Activity window. WSJT-X
     only acts if the message **exactly** matches a prior decode that is a CQ or
-    QRZ, then auto-sequences the rest of the FT8/FT4 QSO itself.
+    QRZ. If WSJT-X's "Auto Seq" is on (the usual FT8/FT4 default) it then sequences
+    the rest of the QSO to completion on its own; if Auto Seq is off this starts
+    only the first transmission (Auto Seq is a UI setting, not UDP-controllable).
 
     Identify the decode by `seq` (from the `decodes` tool) or by exact `message`
     text (the most recent matching buffered decode is used). `modifiers` may be a

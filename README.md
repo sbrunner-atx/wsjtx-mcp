@@ -26,14 +26,23 @@ inbound *control* messages. So this server runs a **background UDP listener** th
 continuously parses datagrams and keeps the latest status, a buffer of decodes,
 and completed QSOs — you read those, and nudge WSJT-X with control messages.
 
-Two consequences worth knowing up front:
+Consequences worth knowing up front:
 
 - **No dial-frequency control over UDP.** You can read the dial frequency from
   `Status`, and set mode/sub-mode/Rx DF/T-R period via `configure`, but **QSY is a
   rig-control concern** (Hamlib/CAT or the UI), not this server.
-- **You can halt Tx but not "Enable Tx".** Transmission is *started* by answering
-  a CQ (`reply`) or by `free_text` with `send=true`; it is *stopped* by
-  `transmit halt`. There is no UDP command to press "Enable Tx".
+- **You can start and halt Tx, but cannot toggle "Enable Tx".** Transmission is
+  *started* by answering a CQ (`reply`) or by `free_text` with `send=true`, and
+  *stopped* by `transmit halt`. There is no UDP command for the "Enable Tx",
+  "Auto Seq", "Call 1st", or "Hold Tx Freq" checkboxes — those stay UI settings.
+- **`reply` gives hands-free QSOs only when WSJT-X's "Auto Seq" is on.** A `reply`
+  is equivalent to double-clicking a CQ; with **Auto Seq enabled** (the usual
+  FT8/FT4 default) WSJT-X then sequences the whole exchange to `QSOLogged` with no
+  further calls. With Auto Seq *off*, `reply` starts only the first transmission.
+- **Best for search-and-pounce, weak for RUN.** The API is built to *answer* CQs
+  (and only CQ/QRZ decodes), so S&P is fully automatable. It has no clean way to
+  drive a repeating *call-CQ* (RUN) cycle — that needs WSJT-X's own "Enable Tx",
+  or a `free_text` CQ re-sent each period.
 
 ## Requirements
 
@@ -72,7 +81,7 @@ address each datagram arrived from.
 | `diagnostics` | observe | Host/network + bind status + datagram counts + gate state. |
 | `decodes` | observe/nudge | `read` / `drain` (poll new) / `clear_local` / `replay`. The RX plane. |
 | `log` | observe | Buffered completed QSOs (`QSOLogged` + `LoggedADIF`) → feed N3FJP. |
-| `reply` | **transmit** | Answer a buffered CQ/QRZ decode (auto-sequences the QSO). |
+| `reply` | **transmit** | Answer a buffered CQ/QRZ decode (auto-sequences the QSO when WSJT-X "Auto Seq" is on). |
 | `free_text` | **transmit** if `send` | Set the Tx5 free-text message; `send=true` keys the radio. |
 | `transmit` | control | `halt` / `halt_auto` — stop transmitting (UDP can't *enable* Tx). |
 | `configure` | control | Mode/sub-mode/Rx DF/T-R period/freq-tol/DX call+grid. **No dial freq.** |

@@ -96,10 +96,21 @@ Direction is relative to a server: **Out** = WSJT-X → you; **In** = you → WS
 - **No dial-frequency control over UDP.** `Configure` sets mode/submode/Rx
   DF/T-R/freq-tolerance/DX call+grid, but **not** the dial frequency. QSY is a
   rig-control concern (Hamlib/CAT or the UI).
-- **No "Enable Tx" over UDP.** You can `HaltTx`, but cannot press Enable Tx;
-  transmission is *started* by `Reply` (answer a CQ) or `FreeText` with
-  `Send=true`.
+- **No "Enable Tx" over UDP** — and no UDP control of the **Auto Seq**, **Call
+  1st**, or **Hold Tx Freq** checkboxes either. You can `HaltTx`, but cannot
+  press Enable Tx; transmission is *started* by `Reply` (answer a CQ) or
+  `FreeText` with `Send=true`. The protocol is deliberately a "cooperative
+  service, not a secondary user interface" (per the header).
 - **`Reply` must exactly match a prior CQ/QRZ decode** — it is equivalent to
-  double-clicking that line; WSJT-X then auto-sequences the QSO.
-- **One binder per UDP port.** If JTAlert/GridTracker/N1MM own 2237, use a
-  secondary UDP server, a multicast group, or a different host.
+  double-clicking that line. Whether the *rest* of the QSO then runs
+  automatically depends on WSJT-X's **"Auto Seq"** setting: with Auto Seq **on**
+  (the usual FT8/FT4 default) WSJT-X sequences the full exchange to `QSOLogged`;
+  with it **off**, `Reply` starts only the first transmission and the header's
+  expectation is that the operator completes the QSO manually in the UI.
+- **Strong for S&P, weak for RUN.** Because `Reply` only answers CQ/QRZ and there
+  is no Enable-Tx toggle, *answering* CQs is fully automatable but *calling* CQ on
+  a repeating cycle is not — that relies on WSJT-X's own Enable Tx, or a
+  `FreeText` CQ re-sent each T/R period (without WSJT-X's standard sequencing).
+- **One binder per UDP port** (a UDP/OS fact, not a WSJT-X limit). If
+  JTAlert/GridTracker/N1MM own 2237, use a secondary UDP server, a multicast
+  group, or a different host.
