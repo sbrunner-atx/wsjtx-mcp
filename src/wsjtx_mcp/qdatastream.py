@@ -22,9 +22,10 @@ format docs):
 * ``QDateTime`` — ``qint64`` Julian day, ``quint32`` ms since midnight, ``quint8``
   timespec (0=local, 1=UTC, 2=offset-from-UTC then a ``qint32`` offset).  WSJT-X
   avoids the time-zone forms.
-* ``QColor`` — Qt's ``version >= 7`` form: a ``qint8`` colour-spec then five
-  ``quint16`` channels (alpha, red, green, blue, pad).  An *invalid* colour
-  (spec ``0``) is how the protocol clears callsign highlighting.
+* ``QColor`` — Qt's *QDataStream-version ≥ 7* form (the standard Qt 5.x layout,
+  which Qt_5_4 uses): a ``qint8`` colour-spec then five ``quint16`` channels
+  (alpha, red, green, blue, pad).  An *invalid* colour (spec ``0``) is how the
+  protocol clears callsign highlighting.
 
 The encoders/decoders are deliberately symmetric and round-trip tested against
 byte fixtures, because this is exactly where wire-format bugs hide.

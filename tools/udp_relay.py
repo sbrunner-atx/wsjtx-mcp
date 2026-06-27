@@ -76,13 +76,12 @@ def serve_udp(
     loop.bind(("127.0.0.1", 0))  # ephemeral loopback source toward the MCP server
 
     deliver = (deliver_host, deliver_port)
-    state: dict[str, tuple[str, int] | None] = {
-        "remote": (remote_host, remote_port) if remote_host and remote_port else None
-    }
+    pinned = (remote_host, remote_port) if remote_host and remote_port else None
+    state: dict[str, tuple[str, int] | None] = {"remote": pinned}
+    remote_label = f"pinned {remote_host}:{remote_port}" if pinned else "auto"
     print(
         f"mcp-host-bridge(udp): LAN {listen_host}:{listen_port} <-> "
-        f"deliver {deliver_host}:{deliver_port} "
-        f"(remote={'pinned ' + remote_host + ':' + str(remote_port) if state['remote'] else 'auto'})",
+        f"deliver {deliver_host}:{deliver_port} (remote={remote_label})",
         flush=True,
     )
 
