@@ -46,7 +46,8 @@ Consequences worth knowing up front:
 
 ## Requirements
 
-- WSJT-X 2.x (verified against the 2.7 message schema, **schema 3 / Qt_5_4**).
+- WSJT-X 2.1 through 3.x — the UDP message protocol is **schema 3 / Qt_5_4** and
+  has been stable across those releases (verified live against WSJT-X **3.0.2**).
 - In WSJT-X: **Settings → Reporting → UDP Server**
   - **UDP Server** = the host running this server (default `127.0.0.1`), **port
     `2237`**.
@@ -89,6 +90,7 @@ address each datagram arrived from.
 | `highlight` | control | Colour or clear a callsign in Band Activity. |
 | `location` | control | Override the session Maidenhead grid. |
 | `switch_config` | control | Switch to a named WSJT-X configuration. |
+| `annotate` | control | Set a Fox/Hound sort-order annotation for a DX call (niche, DXpedition). |
 | `wsjtx_call` | escape hatch | Build & send any message type by name (gate still applies). |
 
 ## Transmit safety

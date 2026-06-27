@@ -111,6 +111,15 @@ def test_highlight_clear_all():
     assert out["operation"] == "clear_all"
 
 
+@needs_bind
+def test_annotate_dispatch():
+    _inject_instance()
+    out = srv.annotate(dx_call="DX1ABC", sort_order=10)
+    assert out["operation"] == "annotate"
+    assert out["dx_call"] == "DX1ABC"
+    assert out["bytes"] > 0
+
+
 # --- gate-open path ----------------------------------------------------------
 
 

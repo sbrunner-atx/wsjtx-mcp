@@ -45,6 +45,7 @@ LOGGED_ADIF = 12
 HIGHLIGHT_CALLSIGN = 13
 SWITCH_CONFIGURATION = 14
 CONFIGURE = 15
+ANNOTATION_INFO = 16
 
 TYPE_NAMES: dict[int, str] = {
     HEARTBEAT: "Heartbeat",
@@ -63,6 +64,7 @@ TYPE_NAMES: dict[int, str] = {
     HIGHLIGHT_CALLSIGN: "HighlightCallsign",
     SWITCH_CONFIGURATION: "SwitchConfiguration",
     CONFIGURE: "Configure",
+    ANNOTATION_INFO: "AnnotationInfo",
 }
 
 NAME_TO_TYPE: dict[str, int] = {name.lower(): num for num, name in TYPE_NAMES.items()}
@@ -397,4 +399,25 @@ def build_configure(
     w.utf8(dx_call)
     w.utf8(dx_grid)
     w.boolean(generate_messages)
+    return w.getvalue()
+
+
+def build_annotation_info(
+    instance_id: str,
+    dx_call: str = "",
+    sort_order: int | None = None,
+    schema: int = SCHEMA,
+) -> bytes:
+    """Build an AnnotationInfo message (Fox/Hound sort-order annotation for a DX call).
+
+    Niche DXpedition feature: a server can score callsigns and set a numeric sort
+    order so the Hound queue can be sorted by it. ``sort_order=None`` sends "no
+    sort order provided" (value 0); a value of ``0xFFFFFFFF`` removes a call's
+    sort-order entry from WSJT-X's internal table.
+    """
+    w = _begin(ANNOTATION_INFO, instance_id, schema)
+    w.utf8(dx_call)
+    provided = sort_order is not None
+    w.boolean(provided)
+    w.u32(sort_order if provided else 0)
     return w.getvalue()

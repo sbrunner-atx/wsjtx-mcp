@@ -4,6 +4,24 @@ All notable changes to **wsjtx-mcp** are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project aims to follow
 [Semantic Versioning](https://semver.org/).
 
+## [0.1.2] - 2026-06-27
+
+### Added
+- **`AnnotationInfo` (message type 16)** plus a new **`annotate`** tool — the
+  Fox/Hound sort-order annotation for a DX call (niche DXpedition use). The
+  authoritative [`WSJTX/wsjtx`](https://github.com/WSJTX/wsjtx)
+  `NetworkMessage.hpp` enum runs **0–16** (`Heartbeat … AnnotationInfo`); an
+  earlier draft transcribed from a stale third-party mirror stopped at
+  `Configure` (15) and wrongly treated AnnotationInfo as absent. **All 17 message
+  types are now implemented.**
+
+### Fixed
+- Corrected the version/compatibility wording: the UDP message protocol is
+  schema 3 / Qt_5_4 and stable across WSJT-X 2.1 → 3.x (verified live against
+  **3.0.2**) — earlier docs said "2.x / 2.7 schema".
+- Noted the 3.0.x `Configure` behaviour: a mode/submode change may move the dial
+  to that band/mode's default frequency if the current one isn't in the table.
+
 ## [0.1.1] - 2026-06-26
 
 Docs + packaging maintenance (no `src/` logic changes; codec, listener, and the

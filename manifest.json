@@ -2,7 +2,7 @@
   "manifest_version": "0.4",
   "name": "wsjtx-mcp",
   "display_name": "WSJT-X (Amateur Radio)",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "Operate WSJT-X (FT8/FT4/WSPR…) from Claude over its UDP message protocol.",
   "long_description": "Connects to WSJT-X's UDP message protocol (schema 3 / Qt_5_4) and exposes it as a small set of logically-grouped tools. A background listener tracks the latest Status, a buffer of Decodes (the RX data plane), and completed QSOs (QSOLogged + ADIF) ready to forward to N3FJP. Control tools answer a CQ (Reply, which auto-sequences the FT8/FT4 QSO when WSJT-X's Auto Seq is on), set the free-text message, halt Tx, configure mode/sub-mode/Rx DF/T-R period, clear windows, highlight callsigns, set the session grid, and switch configurations — plus an escape hatch for any message type. Safe by design: the callsign is the single transmit gate, so with no callsign set the server is receive-only and refuses every transmit-initiating message. Note WSJT-X's UDP protocol cannot set the dial frequency or press 'Enable Tx'; QSY is a rig-control concern. Requires WSJT-X Settings → Reporting → 'Accept UDP requests' for control. Pairs with fldigi-mcp and contest-mcp for an end-to-end operate-and-log workflow.",
   "author": {
@@ -48,6 +48,7 @@
     { "name": "highlight", "description": "Colour or clear a callsign in Band Activity." },
     { "name": "location", "description": "Override the session Maidenhead grid." },
     { "name": "switch_config", "description": "Switch to a named WSJT-X configuration." },
+    { "name": "annotate", "description": "Set a Fox/Hound sort-order annotation for a DX call (niche, DXpedition)." },
     { "name": "wsjtx_call", "description": "Escape hatch: send any message type by name (gate still applies)." }
   ],
   "tools_generated": false,

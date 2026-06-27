@@ -60,3 +60,9 @@ def test_raw_builders_cover_inbound_types():
     # Every name maps to a real protocol builder.
     for name, (builder, _) in methods.RAW_BUILDERS.items():
         assert callable(builder), name
+
+
+def test_raw_builders_includes_annotation_info():
+    builder, is_tx = methods.RAW_BUILDERS["annotation_info"]
+    assert builder is protocol.build_annotation_info
+    assert is_tx({}) is False  # niche control message, never keys the radio

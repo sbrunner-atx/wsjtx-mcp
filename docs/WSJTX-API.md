@@ -73,6 +73,7 @@ Direction is relative to a server: **Out** = WSJT-X → you; **In** = you → WS
 | 13 | HighlightCallsign | In | callsign, bg QColor, fg QColor, highlight-last bool |
 | 14 | SwitchConfiguration | In | configuration name utf8 |
 | 15 | Configure | In | mode, freq tol quint32, submode, fast mode bool, T/R period quint32, rx df quint32, dx call, dx grid, generate-messages bool |
+| 16 | AnnotationInfo | In | dx call utf8, sort-order-provided bool, sort order quint32 (0xFFFFFFFF removes). Fox/Hound DXpedition sort-order — niche |
 
 ### Enumerations
 

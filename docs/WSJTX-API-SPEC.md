@@ -3,10 +3,12 @@
 The structured message catalog the `wsjtx-mcp` code is built from. Deliberately
 terse and unambiguous. The prose companion is [`WSJTX-API.md`](WSJTX-API.md).
 
-Source of truth: `Network/NetworkMessage.hpp` in the WSJT-X repository
-(schema **3** / `QDataStream::Qt_5_4`), cross-checked against the User Guide's
-"Protocol Specifications / Reporting (UDP Server)" section and the `pywsjtx`
-reference implementation.
+Source of truth: `Network/NetworkMessage.hpp` in the authoritative
+[`WSJTX/wsjtx`](https://github.com/WSJTX/wsjtx) repository (schema **3** /
+`QDataStream::Qt_5_4`), cross-checked against the User Guide's "Protocol
+Specifications / Reporting (UDP Server)" section and the `pywsjtx` reference
+implementation. Covers all **17** message types (**0–16**, `Heartbeat …
+AnnotationInfo`).
 
 > **Verified live** against WSJT-X reporting version **3.0.2** on 2026-06-26
 > (Heartbeat header schema **2**, advertised max schema **3**). Real captured
@@ -140,7 +142,14 @@ ON (not UDP-controllable); with it off, only the first transmission is sent.
 `Id` · `Mode` utf8 · `Frequency Tolerance` quint32 · `Submode` utf8 ·
 `Fast Mode` bool · `T/R Period` quint32 · `Rx DF` quint32 · `DX Call` utf8 ·
 `DX Grid` utf8 · `Generate Messages` bool. Empty utf8 / `0xFFFFFFFF` = no change.
-**No dial frequency.**
+**No dial frequency.** (3.0.x note: a mode/submode change may also move the dial
+to that band/mode's default frequency if the current one isn't in the table.)
+
+### 16 · AnnotationInfo — In — control · **D**
+`Id` · `DX Call` utf8 · `Sort Order Provided` bool · `Sort Order` quint32.
+Fox/Hound sort-order annotation for a DX call (niche DXpedition use — score
+callers so the Hound queue can be sorted). `Sort Order` `0xFFFFFFFF` removes a
+call's entry. Reachable via the `annotate` tool or `wsjtx_call`.
 
 ### Enumerations
 
@@ -149,11 +158,14 @@ ON (not UDP-controllable); with it off, only the first transmission is sent.
 - **Reply.Modifiers** (bitmask): 0x00 none, 0x02 SHIFT, 0x04 CTRL/CMD, 0x08 ALT,
   0x10 META, 0x20 KEYPAD, 0x40 group-switch.
 
-## Notes & divergences from the seed
+## Notes
 
-- The seed listed a message **#16 `AnnotationInfo`**; it is **not present** in
-  mainline WSJT-X `NetworkMessage.hpp` (enum ends at `Configure`=15). Only
-  types 0–15 are implemented.
+- **`AnnotationInfo` (type 16) IS in mainline.** The authoritative
+  [`WSJTX/wsjtx`](https://github.com/WSJTX/wsjtx) `Network/NetworkMessage.hpp`
+  enum runs `Heartbeat … Configure, AnnotationInfo` — 17 types, **0–16** — all of
+  which wsjtx-mcp now implements. (An earlier draft, transcribed from a stale
+  third-party mirror that stopped at `Configure`=15, wrongly called it absent;
+  corrected in 0.1.2.)
 - WSJT-X 3.0.2 emits a **schema-2 header** while advertising **max schema 3**.
   The codec is byte-identical for the message types we send across schema 2/3
   (the differences are confined to QDateTime/QColor edge cases that share the

@@ -15,4 +15,4 @@ It is the weak-signal leg of an "operate → log" trio alongside ``fldigi-mcp``
 (broad digital modes) and ``contest-mcp`` (N3FJP logging).
 """
 
-__version__ = "0.1.1"
+__version__ = "0.1.2"

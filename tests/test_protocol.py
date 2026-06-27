@@ -189,3 +189,24 @@ def test_build_highlight_invalid_color_clears():
     data = protocol.build_highlight_callsign("WSJT-X", "AE5VG", background=None, foreground=None)
     parsed_id = protocol.parse(data).id
     assert parsed_id == "WSJT-X"
+
+
+def test_build_annotation_info_round_trip():
+    data = protocol.build_annotation_info("WSJT-X", dx_call="DX1ABC", sort_order=42)
+    msg = protocol.parse(data)
+    assert msg.type == protocol.ANNOTATION_INFO
+    assert msg.type_name == "AnnotationInfo"
+    assert msg.id == "WSJT-X"
+    # …DX call, then sort-order-provided=true (0x01) and the quint32 sort order 42.
+    assert data.endswith(b"\x01\x00\x00\x00\x2a")
+
+
+def test_build_annotation_info_no_sort_order():
+    data = protocol.build_annotation_info("WSJT-X", dx_call="DX1ABC")
+    # provided=false (0x00) and sort order 0.
+    assert data.endswith(b"\x00\x00\x00\x00\x00")
+
+
+def test_build_annotation_info_remove_marker():
+    data = protocol.build_annotation_info("WSJT-X", dx_call="DX1ABC", sort_order=0xFFFFFFFF)
+    assert data.endswith(b"\x01\xff\xff\xff\xff")

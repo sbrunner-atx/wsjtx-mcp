@@ -444,6 +444,28 @@ def switch_config(name: str, instance: str | None = None) -> dict:
     return {"operation": "switch_config", "name": name, **result}
 
 
+# --- annotate (Fox/Hound sort-order, niche) ----------------------------------
+
+
+@mcp.tool()
+def annotate(
+    dx_call: str,
+    sort_order: int | None = None,
+    instance: str | None = None,
+) -> dict:
+    """Set a Fox/Hound sort-order annotation for a DX call (no transmit).
+
+    Niche DXpedition feature (AnnotationInfo): lets a server "score" callers so
+    the Hound queue can be sorted by it. `sort_order` is a number (lower sorts
+    first); omit it to send "no sort order"; pass 4294967295 (0xFFFFFFFF) to
+    remove a call's entry from WSJT-X's internal table.
+    """
+    result = _dispatch(
+        protocol.build_annotation_info, instance, dx_call=dx_call, sort_order=sort_order
+    )
+    return {"operation": "annotate", "dx_call": dx_call, "sort_order": sort_order, **result}
+
+
 # --- escape hatch ------------------------------------------------------------
 
 
@@ -492,6 +514,7 @@ def _type_for(key: str) -> int:
         protocol.build_highlight_callsign: protocol.HIGHLIGHT_CALLSIGN,
         protocol.build_switch_configuration: protocol.SWITCH_CONFIGURATION,
         protocol.build_configure: protocol.CONFIGURE,
+        protocol.build_annotation_info: protocol.ANNOTATION_INFO,
     }.get(builder, -1)
 
 

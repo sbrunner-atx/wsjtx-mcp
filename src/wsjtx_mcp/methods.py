@@ -144,4 +144,6 @@ RAW_BUILDERS: dict[str, tuple] = {
     "switchconfiguration": (protocol.build_switch_configuration, _NEVER),
     "switch_configuration": (protocol.build_switch_configuration, _NEVER),
     "configure": (protocol.build_configure, _NEVER),
+    "annotationinfo": (protocol.build_annotation_info, _NEVER),
+    "annotation_info": (protocol.build_annotation_info, _NEVER),
 }
