@@ -1,0 +1,94 @@
+{
+  "manifest_version": "0.4",
+  "name": "wsjtx-mcp",
+  "display_name": "WSJT-X (Amateur Radio)",
+  "version": "0.1.0",
+  "description": "Operate WSJT-X (FT8/FT4/WSPR…) from Claude over its UDP message protocol.",
+  "long_description": "Connects to WSJT-X's UDP message protocol (schema 3 / Qt_5_4) and exposes it as a small set of logically-grouped tools. A background listener tracks the latest Status, a buffer of Decodes (the RX data plane), and completed QSOs (QSOLogged + ADIF) ready to forward to N3FJP. Control tools answer a CQ (Reply, which auto-sequences the FT8/FT4 QSO), set the free-text message, halt Tx, configure mode/sub-mode/Rx DF/T-R period, clear windows, highlight callsigns, set the session grid, and switch configurations — plus an escape hatch for any message type. Safe by design: the callsign is the single transmit gate, so with no callsign set the server is receive-only and refuses every transmit-initiating message. Note WSJT-X's UDP protocol cannot set the dial frequency or press 'Enable Tx'; QSY is a rig-control concern. Requires WSJT-X Settings → Reporting → 'Accept UDP requests' for control. Pairs with fldigi-mcp and contest-mcp for an end-to-end operate-and-log workflow.",
+  "author": {
+    "name": "Stefan Brunner (AE5VG)",
+    "email": "me@stefanbrunner.org",
+    "url": "https://github.com/sbrunner-atx"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/sbrunner-atx/wsjtx-mcp.git"
+  },
+  "homepage": "https://github.com/sbrunner-atx/wsjtx-mcp",
+  "documentation": "https://github.com/sbrunner-atx/wsjtx-mcp#readme",
+  "support": "https://github.com/sbrunner-atx/wsjtx-mcp/issues",
+  "license": "MIT",
+  "icon": "icon.png",
+  "keywords": ["wsjtx", "ft8", "ft4", "wspr", "ham radio", "amateur radio", "mcp"],
+  "server": {
+    "type": "uv",
+    "entry_point": "src/wsjtx_mcp/server.py",
+    "mcp_config": {
+      "command": "uv",
+      "args": ["run", "--directory", "${__dirname}", "wsjtx-mcp"],
+      "env": {
+        "WSJTX_HOST": "${user_config.wsjtx_host}",
+        "WSJTX_PORT": "${user_config.wsjtx_port}",
+        "WSJTX_CALLSIGN": "${user_config.wsjtx_callsign}",
+        "WSJTX_MULTICAST": "${user_config.wsjtx_multicast}",
+        "WSJTX_INSTANCE": "${user_config.wsjtx_instance}"
+      }
+    }
+  },
+  "tools": [
+    { "name": "status", "description": "Latest WSJT-X Status snapshot + listener/instance health." },
+    { "name": "diagnostics", "description": "Host/network + bind status + datagram counts + transmit-gate state." },
+    { "name": "decodes", "description": "RX data plane: read / drain (poll new) / clear_local / replay." },
+    { "name": "log", "description": "Buffered completed QSOs (QSOLogged + ADIF) to forward to N3FJP." },
+    { "name": "reply", "description": "Answer a buffered CQ/QRZ decode — initiates a transmission (callsign-gated)." },
+    { "name": "free_text", "description": "Set the Tx5 free-text message; send=true keys the radio (gated)." },
+    { "name": "transmit", "description": "Halt transmitting (immediate or end-of-period). UDP cannot enable Tx." },
+    { "name": "configure", "description": "Set mode/sub-mode/Rx DF/T-R period/freq-tol/DX call+grid. No dial freq." },
+    { "name": "clear", "description": "Clear the Band Activity / Rx Frequency windows." },
+    { "name": "highlight", "description": "Colour or clear a callsign in Band Activity." },
+    { "name": "location", "description": "Override the session Maidenhead grid." },
+    { "name": "switch_config", "description": "Switch to a named WSJT-X configuration." },
+    { "name": "wsjtx_call", "description": "Escape hatch: send any message type by name (gate still applies)." }
+  ],
+  "tools_generated": false,
+  "compatibility": {
+    "claude_desktop": ">=0.10.0",
+    "platforms": ["darwin", "win32", "linux"],
+    "runtimes": {
+      "python": ">=3.10"
+    }
+  },
+  "user_config": {
+    "wsjtx_callsign": {
+      "type": "string",
+      "title": "Operator callsign — the transmit gate",
+      "description": "Your licensed callsign. This is the SINGLE transmit gate: leave it BLANK for receive-only (the server refuses every transmit-initiating message). Set it to enable Reply / free-text send.",
+      "default": "",
+      "required": false
+    },
+    "wsjtx_host": {
+      "type": "string",
+      "title": "Listen host",
+      "description": "The address to bind/receive WSJT-X's UDP broadcasts on. Leave as 127.0.0.1 for a local WSJT-X. If WSJT-X is on another computer, run the udp_relay (mcp-host-bridge) on this machine and keep this at 127.0.0.1 — a sandboxed client can't reach LAN IPs directly. See docs/REMOTE-HOST.md.",
+      "default": "127.0.0.1"
+    },
+    "wsjtx_port": {
+      "type": "number",
+      "title": "Listen port (WSJT-X UDP Server port)",
+      "description": "WSJT-X Settings → Reporting → UDP Server port. Default 2237. (Also enable 'Accept UDP requests' there for control.)",
+      "default": 2237
+    },
+    "wsjtx_multicast": {
+      "type": "string",
+      "title": "Multicast group (optional)",
+      "description": "Optional multicast group to join so several UDP consumers (JTAlert, GridTracker…) can coexist. Leave blank for unicast.",
+      "default": ""
+    },
+    "wsjtx_instance": {
+      "type": "string",
+      "title": "Target instance Id (optional)",
+      "description": "If several WSJT-X instances broadcast here, set the specific instance Id to target for control. Leave blank to auto-select when only one is active.",
+      "default": ""
+    }
+  }
+}

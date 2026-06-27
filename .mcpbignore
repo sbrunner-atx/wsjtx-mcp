@@ -1,0 +1,21 @@
+# Files excluded from the packaged .mcpb bundle
+.git/
+.github/
+.venv/
+venv/
+__pycache__/
+*.py[cod]
+.ruff_cache/
+.pytest_cache/
+.mypy_cache/
+tests/
+*.egg-info/
+build/
+dist/
+.DS_Store
+icon_*.png
+livecheck.py
+probe.py
+smoke_test.py
+make_icon.py
+captures/

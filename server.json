@@ -1,0 +1,62 @@
+{
+  "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
+  "name": "io.github.sbrunner-atx/wsjtx-mcp",
+  "description": "Operate WSJT-X (FT8/FT4/WSPR) from MCP clients over its UDP message protocol.",
+  "repository": {
+    "url": "https://github.com/sbrunner-atx/wsjtx-mcp",
+    "source": "github"
+  },
+  "version": "0.1.0",
+  "packages": [
+    {
+      "registryType": "pypi",
+      "identifier": "wsjtx-mcp",
+      "version": "0.1.0",
+      "transport": {
+        "type": "stdio"
+      },
+      "environmentVariables": [
+        {
+          "name": "WSJTX_CALLSIGN",
+          "description": "Operator callsign — the single transmit gate. Blank = receive-only (refuses all transmit-initiating messages).",
+          "isRequired": false,
+          "isSecret": false,
+          "format": "string",
+          "default": ""
+        },
+        {
+          "name": "WSJTX_HOST",
+          "description": "Address to bind/receive WSJT-X UDP broadcasts on. Use 127.0.0.1 (and the udp_relay) for a remote WSJT-X.",
+          "isRequired": false,
+          "isSecret": false,
+          "format": "string",
+          "default": "127.0.0.1"
+        },
+        {
+          "name": "WSJTX_PORT",
+          "description": "WSJT-X Settings → Reporting → UDP Server port. Default 2237. Enable 'Accept UDP requests' for control.",
+          "isRequired": false,
+          "isSecret": false,
+          "format": "string",
+          "default": "2237"
+        },
+        {
+          "name": "WSJTX_MULTICAST",
+          "description": "Optional multicast group to join so multiple UDP consumers can coexist. Blank = unicast.",
+          "isRequired": false,
+          "isSecret": false,
+          "format": "string",
+          "default": ""
+        },
+        {
+          "name": "WSJTX_INSTANCE",
+          "description": "Optional WSJT-X instance Id to target when several broadcast here.",
+          "isRequired": false,
+          "isSecret": false,
+          "format": "string",
+          "default": ""
+        }
+      ]
+    }
+  ]
+}

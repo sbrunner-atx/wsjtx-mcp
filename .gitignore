@@ -1,0 +1,33 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.eggs/
+build/
+dist/
+
+# Virtual environments / uv
+.venv/
+venv/
+
+# Tooling caches
+.ruff_cache/
+.pytest_cache/
+.mypy_cache/
+
+# OS / editor
+.DS_Store
+*.swp
+.idea/
+.vscode/
+
+# Packaged desktop-extension build artifact (attach to a GitHub Release instead)
+*.mcpb
+
+# Generated icon size variants (only icon.png is tracked)
+icon_*.png
+
+# Local live-test scratch scripts (never committed)
+livecheck.py
+probe.py
+captures/
