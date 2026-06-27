@@ -1,6 +1,6 @@
 [project]
 name = "wsjtx-mcp"
-version = "0.1.0"
+version = "0.1.1"
 description = "An MCP server that controls WSJT-X (FT8/FT4/etc.) over its UDP message protocol."
 readme = "README.md"
 license = { text = "MIT" }

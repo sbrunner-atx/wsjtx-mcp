@@ -4,6 +4,28 @@ All notable changes to **wsjtx-mcp** are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project aims to follow
 [Semantic Versioning](https://semver.org/).
 
+## [0.1.1] - 2026-06-26
+
+Docs + packaging maintenance (no `src/` logic changes; codec, listener, and the
+callsign transmit-gate are unchanged).
+
+### Changed
+- **Remote-host bridging now uses the published
+  [`mcp-host-bridge`](https://github.com/sbrunner-atx/mcp-host-bridge) 0.2.0**,
+  which ships UDP support and a built-in `wsjtx` preset. `docs/REMOTE-HOST.md`,
+  `README.md`, `INSTALL.md`, `manifest.json`, and `server.json` now point at
+  `mcp-host-bridge install wsjtx --to <rig-host>` (deliver port `2238`) instead of
+  a hand-run relay + plist.
+- Clarified that `reply` only auto-completes a QSO when WSJT-X's **"Auto Seq"** is
+  enabled (a UI setting, not UDP-controllable), and that the UDP API is strong for
+  search-and-pounce but cannot drive a call-CQ RUN cycle. Updated `README.md`,
+  `docs/WSJTX-API.md`, `docs/WSJTX-API-SPEC.md`, the `reply` tool docstring, and
+  `manifest.json`.
+
+### Removed
+- Retired the bundled `tools/udp_relay.py` — the UDP relay now lives in the
+  `mcp-host-bridge` package.
+
 ## [0.1.0] - 2026-06-26
 
 Initial **experimental** release.

@@ -8,82 +8,70 @@ machine than wsjtx-mcp, the server cannot talk to it directly.
 The fix is a small **UDP relay** that runs *outside* the sandbox on the
 wsjtx-mcp host, bridges the LAN to loopback, and routes WSJT-X's broadcasts in
 and your control replies back out. WSJT-X's protocol is connectionless and
-*bidirectional*, so this needs a UDP-aware relay (`tools/udp_relay.py` in this
-repo, the UDP sibling of the TCP `mcp-host-bridge` relay used by fldigi-mcp /
-contest-mcp).
+*bidirectional*, so this needs a UDP-aware relay — provided by the
+**[`mcp-host-bridge`](https://github.com/sbrunner-atx/mcp-host-bridge)** tool
+(the same loopback bridge used for fldigi / N3FJP, which gained a UDP mode and a
+built-in `wsjtx` preset in v0.2.0).
 
 ## Topology
 
 ```
   remote WSJT-X                  bridge host (Mac)                 wsjtx-mcp
-  Settings → Reporting           udp_relay.py                      (loopback only)
-  UDP Server =          ──►   --listen 0.0.0.0:2237   ──►   --deliver 127.0.0.1:2238
-  <bridge-LAN-IP> : 2237     (LAN socket A)                 WSJTX_HOST=127.0.0.1
-                             (loopback socket B)            WSJTX_PORT=2238
-  control replies       ◄──   B → A → back to the remote WSJT-X
+  Settings → Reporting           mcp-host-bridge (wsjtx)           (loopback only)
+  UDP Server =          ──►   listen 0.0.0.0:2237     ──►   deliver 127.0.0.1:2238
+  <bridge-LAN-IP> : 2237     (LAN socket)                   WSJTX_HOST=127.0.0.1
+                             (loopback socket)              WSJTX_PORT=2238
+  control replies       ◄──   loopback → LAN → back to the remote WSJT-X
 ```
 
 - WSJT-X (remote) sends its UDP datagrams to the **bridge host's LAN IP**, port
   `2237`.
-- The relay learns the remote peer from the first datagram and forwards
+- The bridge learns the remote peer from the first datagram and forwards
   everything to wsjtx-mcp on `127.0.0.1:2238`.
-- wsjtx-mcp's control replies go back to the relay's loopback socket, which sends
+- wsjtx-mcp's control replies go back to the bridge's loopback socket, which sends
   them on to the remote WSJT-X — exactly the address each datagram came from.
 
-## Run it
+## Set it up with mcp-host-bridge
+
+Install the bridge (no clone needed):
 
 ```sh
-python3 ~/.mcp-host-bridge/udp_relay.py run \
-  --listen 0.0.0.0:2237 \
-  --deliver 127.0.0.1:2238
+uvx mcp-host-bridge --help          # or: pipx install mcp-host-bridge
 ```
 
-Then set wsjtx-mcp's config to `WSJTX_HOST=127.0.0.1`, `WSJTX_PORT=2238`, and in
-the remote WSJT-X set **UDP Server** to the bridge host's LAN IP, port `2237`
-(and tick **Accept UDP requests** for control).
+…or grab a per-OS binary from the
+[mcp-host-bridge releases](https://github.com/sbrunner-atx/mcp-host-bridge/releases).
 
-## Run it under launchd (macOS, auto-start)
-
-Save as `~/Library/LaunchAgents/com.mcp-host-bridge.wsjtx.plist` and
-`launchctl load` it (mirrors the existing TCP bridge agents; uses the system
-`/usr/bin/python3`, so no venv/PATH dependency):
-
-```xml
-<?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
-<plist version="1.0">
-<dict>
-    <key>Label</key><string>com.mcp-host-bridge.wsjtx</string>
-    <key>ProgramArguments</key>
-    <array>
-        <string>/usr/bin/python3</string>
-        <string>/Users/YOU/.mcp-host-bridge/udp_relay.py</string>
-        <string>run</string>
-        <string>--listen</string>
-        <string>0.0.0.0:2237</string>
-        <string>--deliver</string>
-        <string>127.0.0.1:2238</string>
-    </array>
-    <key>RunAtLoad</key><true/>
-    <key>KeepAlive</key><true/>
-    <key>StandardOutPath</key><string>/tmp/mcp-host-bridge-wsjtx.log</string>
-    <key>StandardErrorPath</key><string>/tmp/mcp-host-bridge-wsjtx.err</string>
-</dict>
-</plist>
-```
+Then install the persistent `wsjtx` bridge service (cross-platform — launchd on
+macOS, systemd on Linux, a Scheduled Task on Windows; `netsh portproxy` is
+TCP-only and is skipped for UDP automatically):
 
 ```sh
-launchctl load ~/Library/LaunchAgents/com.mcp-host-bridge.wsjtx.plist
-# to update args later:
-launchctl unload ~/Library/LaunchAgents/com.mcp-host-bridge.wsjtx.plist && \
-launchctl load   ~/Library/LaunchAgents/com.mcp-host-bridge.wsjtx.plist
+mcp-host-bridge install wsjtx --to <remote-wsjtx-host>
+# listens 0.0.0.0:2237 (LAN) and delivers 127.0.0.1:2238 (loopback).
+# --to is an optional hint; the remote peer is auto-learned from the first datagram.
+
+mcp-host-bridge status   wsjtx     # check it
+mcp-host-bridge uninstall wsjtx    # remove it
 ```
+
+**Critical wsjtx-mcp config for the bridged case:** set
+
+- `WSJTX_HOST=127.0.0.1`
+- **`WSJTX_PORT=2238`** — the bridge's *deliver* port, **not** the default `2237`
+  (the bridge's own LAN socket occupies `2237` on that host),
+
+and in the remote WSJT-X set **Settings → Reporting → UDP Server** to the bridge
+host's LAN IP, port `2237` (and tick **Accept UDP requests** for control).
 
 ## Notes
 
-- Run the relay on a **different loopback port** (`2238`) than the LAN port
-  (`2237`) so the relay's LAN socket and wsjtx-mcp's listener don't collide.
-- For a **local** WSJT-X (same machine), you don't need the relay at all — point
-  wsjtx-mcp straight at `127.0.0.1:2237`.
-- Multicast is an alternative to the relay when every consumer is on the same
+- The bridge uses a **different loopback port** (`2238`) than the LAN port
+  (`2237`) so its LAN socket and wsjtx-mcp's listener don't collide. Only the
+  remote/bridged case uses `2238`.
+- For a **local** WSJT-X (same machine), you don't need the bridge at all — point
+  wsjtx-mcp straight at `127.0.0.1:2237` (the default).
+- Multicast is an alternative to the bridge when every consumer is on the same
   LAN segment: set `WSJTX_MULTICAST` and WSJT-X's UDP Server to the same group.
+- History: earlier wsjtx-mcp builds shipped a standalone `tools/udp_relay.py`;
+  that relay now lives in `mcp-host-bridge` and the bundled copy has been retired.

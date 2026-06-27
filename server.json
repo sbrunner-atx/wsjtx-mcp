@@ -6,12 +6,12 @@
     "url": "https://github.com/sbrunner-atx/wsjtx-mcp",
     "source": "github"
   },
-  "version": "0.1.0",
+  "version": "0.1.1",
   "packages": [
     {
       "registryType": "pypi",
       "identifier": "wsjtx-mcp",
-      "version": "0.1.0",
+      "version": "0.1.1",
       "transport": {
         "type": "stdio"
       },
@@ -26,7 +26,7 @@
         },
         {
           "name": "WSJTX_HOST",
-          "description": "Address to bind/receive WSJT-X UDP broadcasts on. Use 127.0.0.1 (and the udp_relay) for a remote WSJT-X.",
+          "description": "Address to bind/receive WSJT-X UDP broadcasts on. For a remote WSJT-X use 127.0.0.1 with the mcp-host-bridge 'wsjtx' service and set the port to 2238.",
           "isRequired": false,
           "isSecret": false,
           "format": "string",

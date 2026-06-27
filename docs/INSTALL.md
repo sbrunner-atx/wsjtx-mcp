@@ -65,7 +65,10 @@ Only one process can own UDP `2237` on a host. Options:
 - Point WSJT-X's **secondary** UDP server at wsjtx-mcp's host:port.
 - Use a **multicast** group: set the same group in WSJT-X's UDP Server and in
   `WSJTX_MULTICAST`, so several listeners coexist.
-- Run wsjtx-mcp on a different host (see [REMOTE-HOST.md](REMOTE-HOST.md)).
+- Run wsjtx-mcp on a different host than WSJT-X, bridged by the
+  [`mcp-host-bridge`](https://github.com/sbrunner-atx/mcp-host-bridge) tool
+  (`mcp-host-bridge install wsjtx --to <rig-host>`, then `WSJTX_PORT=2238`) —
+  see [REMOTE-HOST.md](REMOTE-HOST.md).
 
 ## Transmit safety
 

@@ -115,9 +115,11 @@ Beyond that gate:
 Only one process can normally own UDP `2237` on a host. If JTAlert, GridTracker,
 or N1MM already consume it, either point WSJT-X's *secondary* UDP server here, use
 a **multicast** group (`WSJTX_MULTICAST`) so several listeners coexist, or run
-this server on a different host. See [docs/REMOTE-HOST.md](docs/REMOTE-HOST.md)
-for reaching a WSJT-X on another machine (it requires a small UDP forwarder
-because sandboxed MCP clients reach only loopback).
+this server on a different host. To reach a WSJT-X on **another machine**, install
+the [`mcp-host-bridge`](https://github.com/sbrunner-atx/mcp-host-bridge) tool
+(`mcp-host-bridge install wsjtx --to <rig-host>`) and set `WSJTX_PORT=2238` —
+sandboxed MCP clients reach only loopback, and the bridge does the LAN hop. See
+[docs/REMOTE-HOST.md](docs/REMOTE-HOST.md).
 
 ## Development
 
