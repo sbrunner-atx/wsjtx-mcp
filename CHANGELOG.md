@@ -4,6 +4,14 @@ All notable changes to **wsjtx-mcp** are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project aims to follow
 [Semantic Versioning](https://semver.org/).
 
+## [0.1.3] - 2026-09-09
+
+### Fixed
+- **Pin the MCP SDK below 2.0** (`mcp[cli]>=1.2.0,<2`). mcp 2.x renamed
+  `FastMCP` to `MCPServer` and moved `mcp.server.fastmcp`, so a fresh install
+  from PyPI (`uvx wsjtx-mcp`) resolved 2.x and failed at import. The `.mcpb`
+  was unaffected because it ships `uv.lock`. No functional changes.
+
 ## [0.1.2] - 2026-06-27
 
 ### Added

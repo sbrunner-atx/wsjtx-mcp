@@ -1,6 +1,6 @@
 [project]
 name = "wsjtx-mcp"
-version = "0.1.2"
+version = "0.1.3"
 description = "An MCP server that controls WSJT-X (FT8/FT4/etc.) over its UDP message protocol."
 readme = "README.md"
 license = { text = "MIT" }
@@ -28,7 +28,7 @@ classifiers = [
     "Topic :: Communications :: Ham Radio",
 ]
 dependencies = [
-    "mcp[cli]>=1.2.0",
+    "mcp[cli]>=1.2.0,<2",
 ]
 
 [dependency-groups]
