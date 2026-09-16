@@ -42,7 +42,7 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: "20"
-      - name: Check the tag matches manifest.json and pyproject.toml
+      - name: Check the tag matches manifest.json, pyproject.toml and server.json
         # Pre-releases are exempt: an rc or throwaway test tag deliberately
         # does not equal the plain project version.
         if: ${{ !github.event.release.prerelease }}
@@ -50,9 +50,11 @@ jobs:
           tag="${GITHUB_REF_NAME#v}"
           manifest=$(python3 -c 'import json;print(json.load(open("manifest.json"))["version"])')
           pyproject=$(python3 -c 'import tomllib;print(tomllib.load(open("pyproject.toml","rb"))["project"]["version"])')
-          echo "tag=$tag manifest=$manifest pyproject=$pyproject"
+          registry=$(python3 -c 'import json;d=json.load(open("server.json"));print(d["version"],d["packages"][0]["version"])')
+          echo "tag=$tag manifest=$manifest pyproject=$pyproject server.json=$registry"
           test "$tag" = "$manifest"
           test "$tag" = "$pyproject"
+          for v in $registry; do test "$tag" = "$v" || exit 1; done
       - name: Build the desktop extension
         run: npx --yes @anthropic-ai/mcpb pack
       - name: Attach to the release
