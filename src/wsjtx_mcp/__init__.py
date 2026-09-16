@@ -15,4 +15,9 @@ It is the weak-signal leg of an "operate → log" trio alongside ``fldigi-mcp``
 (broad digital modes) and ``n3fjp-mcp`` (N3FJP logging).
 """
 
-__version__ = "0.1.3"
+from importlib.metadata import PackageNotFoundError, version
+
+try:  # single source of truth: [project].version in pyproject.toml
+    __version__ = version("wsjtx-mcp")
+except PackageNotFoundError:  # running from a source tree with no install
+    __version__ = "0.0.0+unknown"
