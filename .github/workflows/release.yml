@@ -1,6 +1,7 @@
 name: Release
 
-# Publishes to PyPI via Trusted Publishing (OIDC) — no API token needed.
+# Publishes to PyPI via Trusted Publishing (OIDC) — no API token needed, and
+# builds the Claude Desktop extension (.mcpb) and attaches it to the release.
 # Fires when you publish a GitHub Release (e.g. `gh release create vX.Y.Z`).
 # The release tag's version must match pyproject.toml.
 
@@ -25,3 +26,33 @@ jobs:
         run: uv build
       - name: Publish to PyPI (Trusted Publishing)
         uses: pypa/gh-action-pypi-publish@release/v1
+
+  # Builds the Claude Desktop extension (.mcpb) and attaches it to the release
+  # that triggered this run. The ae5vg.com Downloads page reads the asset list
+  # from the `releases/latest` API, so a release with no asset shows nothing.
+  bundle:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write   # upload a release asset
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+      - name: Check the tag matches manifest.json and pyproject.toml
+        # Pre-releases are exempt: an rc or throwaway test tag deliberately
+        # does not equal the plain project version.
+        if: ${{ !github.event.release.prerelease }}
+        run: |
+          tag="${GITHUB_REF_NAME#v}"
+          manifest=$(python3 -c 'import json;print(json.load(open("manifest.json"))["version"])')
+          pyproject=$(python3 -c 'import tomllib;print(tomllib.load(open("pyproject.toml","rb"))["project"]["version"])')
+          echo "tag=$tag manifest=$manifest pyproject=$pyproject"
+          test "$tag" = "$manifest"
+          test "$tag" = "$pyproject"
+      - name: Build the desktop extension
+        run: npx --yes @anthropic-ai/mcpb pack
+      - name: Attach to the release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh release upload "$GITHUB_REF_NAME" ./*.mcpb --clobber

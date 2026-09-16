@@ -198,7 +198,7 @@ def log(limit: int = 20) -> dict:
     Observe-only: WSJT-X emits these when the operator accepts its "Log QSO"
     dialog. Each entry has the structured QSO record (call, grids, frequency,
     mode, reports, times, exchanges, propagation mode) and the one-record ADIF
-    document — ready to forward to N3FJP via contest-mcp.
+    document — ready to forward to N3FJP via n3fjp-mcp.
     """
     return {"qsos": _wsjtx.read_qso_log(limit)}
 

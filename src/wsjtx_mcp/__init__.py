@@ -12,7 +12,7 @@ and presents it to MCP clients (Claude Desktop, the MCP Inspector) as a small se
 of logically-grouped tools.
 
 It is the weak-signal leg of an "operate → log" trio alongside ``fldigi-mcp``
-(broad digital modes) and ``contest-mcp`` (N3FJP logging).
+(broad digital modes) and ``n3fjp-mcp`` (N3FJP logging).
 """
 
 __version__ = "0.1.3"

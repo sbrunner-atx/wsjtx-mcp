@@ -8,7 +8,7 @@ Chat whether this process can even bind/receive on the expected UDP port — the
 crucial question when running host-side vs. sandboxed.
 
 This file is intentionally protocol-agnostic and near-identical to its siblings
-in ``fldigi-mcp`` / ``contest-mcp``; only the product name in the messages
+in ``fldigi-mcp`` / ``n3fjp-mcp``; only the product name in the messages
 differs.
 """
 

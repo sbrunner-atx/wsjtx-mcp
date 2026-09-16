@@ -10,7 +10,7 @@ It is the weak-signal leg of an "operate → log" trio for amateur radio:
 
 - **[fldigi-mcp](https://github.com/sbrunner-atx/fldigi-mcp)** — operate broad
   digital modes via fldigi (XML-RPC).
-- **[contest-mcp](https://github.com/sbrunner-atx/contest-mcp)** — log QSOs to
+- **[n3fjp-mcp](https://github.com/sbrunner-atx/n3fjp-mcp)** — log QSOs to
   N3FJP (TCP API).
 - **wsjtx-mcp** *(this one)* — operate the FT8/FT4 weak-signal world via WSJT-X
   (UDP message protocol).

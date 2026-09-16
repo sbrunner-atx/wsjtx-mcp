@@ -38,3 +38,11 @@ by a test that proves they are refused when `WSJTX_CALLSIGN` is blank.
 If a field decodes wrong against your WSJT-X build, please open an issue with a
 captured datagram (hex or base64) and your WSJT-X version — that is the fastest
 path to a fix, and may become a new golden fixture.
+
+## Building the desktop extension (.mcpb)
+
+```bash
+npx @anthropic-ai/mcpb pack      # produces wsjtx-mcp.mcpb from manifest.json
+```
+
+The release workflow builds and attaches the bundle; do not upload it by hand.
