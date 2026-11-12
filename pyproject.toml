@@ -1,7 +1,7 @@
 [project]
 name = "wsjtx-mcp"
-version = "0.1.3"
-description = "An MCP server that controls WSJT-X (FT8/FT4/etc.) over its UDP message protocol."
+version = "0.1.4"
+description = "An MCP server that lets Claude and other AI assistants operate WSJT-X (FT8, FT4 and the other weak-signal modes) over its UDP message protocol."
 readme = "README.md"
 license = { text = "MIT" }
 requires-python = ">=3.10"
@@ -17,15 +17,26 @@ keywords = [
     "ham-radio",
     "amateur-radio",
     "weak-signal",
+    "jt65",
+    "msk144",
+    "q65",
+    "wspr",
+    "claude",
+    "ai-assistant",
+    "ai-agent",
+    "llm",
+    "ae5vg",
 ]
 classifiers = [
     "Development Status :: 3 - Alpha",
     "Intended Audience :: Developers",
+    "Intended Audience :: End Users/Desktop",
     "License :: OSI Approved :: MIT License",
     "Operating System :: OS Independent",
     "Programming Language :: Python :: 3",
     "Programming Language :: Python :: 3 :: Only",
     "Topic :: Communications :: Ham Radio",
+    "Topic :: Scientific/Engineering :: Artificial Intelligence",
 ]
 dependencies = [
     "mcp[cli]>=1.2.0,<2",
@@ -41,9 +52,11 @@ dev = [
 wsjtx-mcp = "wsjtx_mcp.server:main"
 
 [project.urls]
-Homepage = "https://github.com/sbrunner-atx/wsjtx-mcp"
+Homepage = "https://ae5vg.com/products/wsjtx-mcp.html"
+Documentation = "https://github.com/sbrunner-atx/wsjtx-mcp#readme"
 Repository = "https://github.com/sbrunner-atx/wsjtx-mcp"
 Issues = "https://github.com/sbrunner-atx/wsjtx-mcp/issues"
+Changelog = "https://github.com/sbrunner-atx/wsjtx-mcp/blob/main/CHANGELOG.md"
 
 [build-system]
 requires = ["hatchling"]

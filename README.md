@@ -2,6 +2,8 @@
 
 # wsjtx-mcp
 
+Project page: [ae5vg.com/products/wsjtx-mcp](https://ae5vg.com/products/wsjtx-mcp.html)
+
 An [MCP](https://modelcontextprotocol.io) server that controls **WSJT-X**
 (FT8/FT4/JT65/MSK144/Q65/WSPR…) from MCP clients such as Claude Desktop and the
 MCP Inspector.
@@ -59,7 +61,7 @@ Consequences worth knowing up front:
 Download the `wsjtx-mcp.mcpb` from the
 [latest release](https://github.com/sbrunner-atx/wsjtx-mcp/releases) and
 double-click it, or drag it onto Claude Desktop → Settings → Extensions. Fill in
-the settings form (callsign, host, port). See [docs/INSTALL.md](docs/INSTALL.md).
+the settings form (callsign, host, port). See [docs/INSTALL.md](https://github.com/sbrunner-atx/wsjtx-mcp/blob/main/docs/INSTALL.md).
 
 ## Configuration
 
@@ -121,7 +123,7 @@ this server on a different host. To reach a WSJT-X on **another machine**, insta
 the [`mcp-host-bridge`](https://github.com/sbrunner-atx/mcp-host-bridge) tool
 (`mcp-host-bridge install wsjtx --to <rig-host>`) and set `WSJTX_PORT=2238` —
 sandboxed MCP clients reach only loopback, and the bridge does the LAN hop. See
-[docs/REMOTE-HOST.md](docs/REMOTE-HOST.md).
+[docs/REMOTE-HOST.md](https://github.com/sbrunner-atx/wsjtx-mcp/blob/main/docs/REMOTE-HOST.md).
 
 ## Development
 
@@ -134,7 +136,7 @@ uv run pytest
 The protocol codec is pure standard library and unit-tested against byte
 fixtures, so the tests need no running WSJT-X. A `smoke_test.py` proves a live
 WSJT-X is reachable receive-only. The field-tested message reference lives in
-[docs/WSJTX-API.md](docs/WSJTX-API.md).
+[docs/WSJTX-API.md](https://github.com/sbrunner-atx/wsjtx-mcp/blob/main/docs/WSJTX-API.md).
 
 ## License
 

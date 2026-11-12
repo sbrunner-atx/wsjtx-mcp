@@ -4,6 +4,16 @@ All notable changes to **wsjtx-mcp** are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project aims to follow
 [Semantic Versioning](https://semver.org/).
 
+## [0.1.4] - 2026-11-12
+
+Package page only; no code or behavior changes.
+
+### Changed
+- The PyPI page links to the project page on ae5vg.com, the changelog and the issue tracker..
+- Links in the README point to GitHub, so they also work on PyPI.
+- More keywords and classifiers, so the package turns up in PyPI searches for AI assistants and ham radio.
+- The release workflow also publishes `server.json` to the official MCP Registry once the PyPI upload is live, so the registry entry no longer falls behind PyPI.
+
 ## [0.1.3] - 2026-09-09
 
 ### Fixed

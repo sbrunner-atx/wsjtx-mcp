@@ -61,3 +61,31 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
         run: gh release upload "$GITHUB_REF_NAME" ./*.mcpb --clobber
+
+  # Publishes server.json to the official MCP Registry once the PyPI upload is
+  # live. The registry checks that this version exists on PyPI and that the
+  # README carries the mcp-name line, so this job runs after `publish`.
+  registry:
+    needs: publish
+    runs-on: ubuntu-latest
+    if: ${{ github.event_name == 'release' && !github.event.release.prerelease }}
+    permissions:
+      id-token: write   # GitHub OIDC login for the io.github.sbrunner-atx namespace
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      - name: Wait until PyPI serves this version
+        run: |
+          name=$(python3 -c 'import json;print(json.load(open("server.json"))["packages"][0]["identifier"])')
+          version=$(python3 -c 'import json;print(json.load(open("server.json"))["version"])')
+          for i in $(seq 1 30); do
+            curl -sf "https://pypi.org/pypi/$name/$version/json" >/dev/null && exit 0
+            sleep 10
+          done
+          echo "PyPI never served $name $version"; exit 1
+      - name: Install mcp-publisher
+        run: curl -sL "https://github.com/modelcontextprotocol/registry/releases/latest/download/mcp-publisher_linux_amd64.tar.gz" | tar xz mcp-publisher
+      - name: Log in to the MCP Registry (GitHub OIDC)
+        run: ./mcp-publisher login github-oidc
+      - name: Publish server.json
+        run: ./mcp-publisher publish
