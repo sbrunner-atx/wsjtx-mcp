@@ -63,19 +63,6 @@ Download the `wsjtx-mcp.mcpb` from the
 double-click it, or drag it onto Claude Desktop → Settings → Extensions. Fill in
 the settings form (callsign, host, port). See [docs/INSTALL.md](https://github.com/sbrunner-atx/wsjtx-mcp/blob/main/docs/INSTALL.md).
 
-## Install as a plugin, with the operating skills
-
-wsjtx-mcp is part of the **Amateur Radio** plugin, which installs wsjtx-mcp, fldigi-mcp, n3fjp-mcp and their operating skills in one step. There is a version for Claude and a version for ChatGPT, Codex and other apps that support the open Agent Plugins standard, such as Cursor, GitHub Copilot and VS Code. The plugin needs [uv](https://docs.astral.sh/uv/).
-
-In Claude Code:
-
-```
-/plugin marketplace add sbrunner-atx/ae5vg-plugins
-/plugin install amateur-radio@ae5vg
-```
-
-For the other apps, see [ae5vg.com/downloads.html#plugins](https://ae5vg.com/downloads.html#plugins).
-
 ## Configuration
 
 | Variable | Default | Purpose |
