@@ -63,6 +63,8 @@ Download the `wsjtx-mcp.mcpb` from the
 drag it onto Claude Desktop → Settings → Desktop app → Extensions (Manage). It then
 shows as a connector under Settings → Customize → Connectors. Fill in the settings form (callsign, host, port). See [docs/INSTALL.md](https://github.com/sbrunner-atx/wsjtx-mcp/blob/main/docs/INSTALL.md).
 
+To run the server itself in Claude Code, Codex, Cursor or VS Code, see [Other AI assistants](https://ae5vg.com/getting-started.html#other-clients) for the command or configuration block to copy.
+
 ## Configuration
 
 | Variable | Default | Purpose |
