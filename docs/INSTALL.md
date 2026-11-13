@@ -14,15 +14,17 @@ In WSJT-X: **Settings → Reporting → UDP Server**.
 > Tip: if JTAlert / GridTracker / N1MM already use port 2237, see
 > [Running alongside other UDP tools](#running-alongside-other-udp-tools).
 
-## 2a. Install as a Claude Desktop extension (.mcpb)
+## 2a. Install as a desktop connector in Claude (.mcpb)
 
 1. Download `wsjtx-mcp.mcpb` from the
    [latest release](https://github.com/sbrunner-atx/wsjtx-mcp/releases).
 2. If you previously installed an older build, **remove it first** (Settings →
-   Extensions → uninstall, and wait for its tile to disappear) so the swap takes
-   effect.
-3. Double-click the `.mcpb`, or drag it onto Claude Desktop → Settings →
-   Extensions.
+   Desktop app → Extensions: Manage → uninstall, and wait for its tile to
+   disappear) so the swap takes effect.
+3. In Claude Desktop, open **Settings → Desktop app**, click **Manage** next
+   to **Extensions**, and drag `wsjtx-mcp.mcpb` onto that page. If dragging does
+   not work, click **Advanced settings**, then **Install extension**. The new
+   connector then shows under **Settings → Customize → Connectors**.
 4. Fill in the settings form:
    - **Operator callsign** — your licensed callsign. Leave **blank for
      receive-only**; set it to enable transmit.

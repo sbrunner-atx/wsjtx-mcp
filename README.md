@@ -60,8 +60,8 @@ Consequences worth knowing up front:
 
 Download the `wsjtx-mcp.mcpb` from the
 [latest release](https://github.com/sbrunner-atx/wsjtx-mcp/releases) and
-double-click it, or drag it onto Claude Desktop → Settings → Extensions. Fill in
-the settings form (callsign, host, port). See [docs/INSTALL.md](https://github.com/sbrunner-atx/wsjtx-mcp/blob/main/docs/INSTALL.md).
+drag it onto Claude Desktop → Settings → Desktop app → Extensions (Manage). It then
+shows as a connector under Settings → Customize → Connectors. Fill in the settings form (callsign, host, port). See [docs/INSTALL.md](https://github.com/sbrunner-atx/wsjtx-mcp/blob/main/docs/INSTALL.md).
 
 ## Configuration
 
