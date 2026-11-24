@@ -123,8 +123,10 @@ or N1MM already consume it, either point WSJT-X's *secondary* UDP server here, u
 a **multicast** group (`WSJTX_MULTICAST`) so several listeners coexist, or run
 this server on a different host. To reach a WSJT-X on **another machine**, install
 the [`mcp-host-bridge`](https://github.com/sbrunner-atx/mcp-host-bridge) tool
-(`mcp-host-bridge install wsjtx --to <rig-host>`) and set `WSJTX_PORT=2238` —
-sandboxed MCP clients reach only loopback, and the bridge does the LAN hop. See
+(`mcp-host-bridge install wsjtx --to <rig-host>`) and set `WSJTX_PORT=2238`.
+Claude Desktop now lets fldigi-mcp and n3fjp-mcp reach other computers directly,
+but receiving WSJT-X's UDP directly from the LAN has not been tested yet, so the
+bridge still does the LAN hop for wsjtx-mcp. See
 [docs/REMOTE-HOST.md](https://github.com/sbrunner-atx/wsjtx-mcp/blob/main/docs/REMOTE-HOST.md).
 
 ## Development

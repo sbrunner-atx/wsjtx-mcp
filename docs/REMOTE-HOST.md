@@ -1,11 +1,15 @@
 # Reaching a WSJT-X on another computer (UDP host bridge)
 
-Sandboxed MCP clients — notably Claude Desktop — let their connector subprocess
-reach only `127.0.0.1` (loopback), **not LAN IP addresses**, even with macOS
-*Privacy & Security → Local Network* toggled on. So if WSJT-X runs on a different
-machine than wsjtx-mcp, the server cannot talk to it directly.
+**Use the bridge for now.** Current Claude Desktop lets its connectors reach
+other computers by their LAN address: fldigi-mcp and n3fjp-mcp now connect to a
+remote fldigi or N3FJP directly (tested 23 November 2026). wsjtx-mcp is
+different. WSJT-X sends UDP datagrams *to* the connector, so the connector must
+receive from the LAN, and its replies go back to the sender. That direct path
+has not been tested yet. Until it has, run WSJT-X on another computer through
+the bridge described here. Older Claude Desktop builds, and MCP clients that
+sandbox their connectors, reach only `127.0.0.1` in any case.
 
-The fix is a small **UDP relay** that runs *outside* the sandbox on the
+The bridge is a small **UDP relay** that runs as its own service on the
 wsjtx-mcp host, bridges the LAN to loopback, and routes WSJT-X's broadcasts in
 and your control replies back out. WSJT-X's protocol is connectionless and
 *bidirectional*, so this needs a UDP-aware relay — provided by the

@@ -1,6 +1,6 @@
 [project]
 name = "wsjtx-mcp"
-version = "0.1.4"
+version = "0.1.5"
 description = "An MCP server that lets Claude and other AI assistants operate WSJT-X (FT8, FT4 and the other weak-signal modes) over its UDP message protocol."
 readme = "README.md"
 license = { text = "MIT" }

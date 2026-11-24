@@ -69,8 +69,10 @@ Only one process can own UDP `2237` on a host. Options:
   `WSJTX_MULTICAST`, so several listeners coexist.
 - Run wsjtx-mcp on a different host than WSJT-X, bridged by the
   [`mcp-host-bridge`](https://github.com/sbrunner-atx/mcp-host-bridge) tool
-  (`mcp-host-bridge install wsjtx --to <rig-host>`, then `WSJTX_PORT=2238`) —
-  see [REMOTE-HOST.md](REMOTE-HOST.md).
+  (`mcp-host-bridge install wsjtx --to <rig-host>`, then `WSJTX_PORT=2238`).
+  See [REMOTE-HOST.md](REMOTE-HOST.md). Claude Desktop now reaches fldigi and
+  N3FJP on other computers directly, but the direct path has not been tested
+  for WSJT-X's UDP yet, so keep the bridge for now.
 
 ## Transmit safety
 
