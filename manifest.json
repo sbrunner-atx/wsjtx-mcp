@@ -70,7 +70,7 @@
     "wsjtx_host": {
       "type": "string",
       "title": "Listen host",
-      "description": "The address to bind/receive WSJT-X's UDP broadcasts on. Keep 127.0.0.1 for a WSJT-X on this computer. If WSJT-X is on another computer, install the mcp-host-bridge 'wsjtx' service on this machine, keep this at 127.0.0.1, and set the port to 2238. Claude Desktop now reaches fldigi and N3FJP on other computers directly, but receiving WSJT-X's UDP directly has not been tested yet, so use the bridge for now. See docs/REMOTE-HOST.md.",
+      "description": "The address to bind/receive WSJT-X's UDP broadcasts on. Keep 127.0.0.1 for a WSJT-X on this computer. If WSJT-X is on another computer, enter this computer's LAN address (or 0.0.0.0) and set WSJT-X's UDP Server to that address, port 2237. If macOS asks to accept incoming connections or to find devices on the local network, allow it. With an older Claude Desktop or macOS, or a client that sandboxes connectors, use the mcp-host-bridge 'wsjtx' service instead: keep 127.0.0.1 and set the port to 2238. See docs/REMOTE-HOST.md.",
       "default": "127.0.0.1"
     },
     "wsjtx_port": {

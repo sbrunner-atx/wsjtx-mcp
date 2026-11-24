@@ -26,7 +26,7 @@
         },
         {
           "name": "WSJTX_HOST",
-          "description": "Address to bind/receive WSJT-X UDP broadcasts on. For a remote WSJT-X use 127.0.0.1 with the mcp-host-bridge 'wsjtx' service and set the port to 2238.",
+          "description": "Address to bind/receive WSJT-X UDP broadcasts on. For a WSJT-X on another computer, use this computer's LAN address or 0.0.0.0 and point WSJT-X's UDP Server at it. With the mcp-host-bridge 'wsjtx' service, use 127.0.0.1 and port 2238.",
           "isRequired": false,
           "isSecret": false,
           "format": "string",

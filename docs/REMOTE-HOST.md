@@ -1,23 +1,48 @@
-# Reaching a WSJT-X on another computer (UDP host bridge)
+# Reaching a WSJT-X on another computer
 
-**Use the bridge for now.** Current Claude Desktop lets its connectors reach
-other computers by their LAN address: fldigi-mcp and n3fjp-mcp now connect to a
-remote fldigi or N3FJP directly (tested 23 November 2026). wsjtx-mcp is
-different. WSJT-X sends UDP datagrams *to* the connector, so the connector must
-receive from the LAN, and its replies go back to the sender. That direct path
-has not been tested yet. Until it has, run WSJT-X on another computer through
-the bridge described here. Older Claude Desktop builds, and MCP clients that
-sandbox their connectors, reach only `127.0.0.1` in any case.
+## Direct: point WSJT-X at this computer
+
+Current Claude Desktop lets its connectors talk to other computers on the LAN.
+fldigi-mcp and n3fjp-mcp connect to a remote fldigi or N3FJP that way (tested
+23 November 2026). wsjtx-mcp is built the same way and never blocks a LAN
+address, so it works directly too. The direction is reversed, though: WSJT-X
+sends UDP *to* wsjtx-mcp, and wsjtx-mcp sends its control messages back to the
+address each datagram came from. So you enter the address of the computer that runs
+wsjtx-mcp, where it listens.
+
+1. Find this computer's LAN address (the one that runs Claude and wsjtx-mcp), for
+   example `192.168.1.20`. On a Mac: System Settings → Network.
+2. In the **wsjtx-mcp settings**, set **Listen host** to that address, or to
+   `0.0.0.0` to listen on every network. Keep **Listen port** at `2237`. Save.
+3. In WSJT-X on the other computer, open **Settings → Reporting**. Set **UDP
+   Server** to this computer's address (`192.168.1.20`), port `2237`. Tick
+   **Accept UDP requests** if you want control.
+4. Ask Claude for WSJT-X's status. WSJT-X sends a Heartbeat every 15 seconds,
+   so give it that long. If macOS asks whether to accept incoming connections or
+   to find devices on your local network, allow it.
+5. If nothing arrives, check **System Settings → Privacy & Security → Local
+   Network** (Claude on) and **System Settings → Network → Firewall** (incoming
+   connections allowed for Claude or its Python). The `diagnostics` tool shows
+   whether the listener bound and how many datagrams have arrived.
+
+Listening on a LAN address means any computer on that network can send to
+wsjtx-mcp. Keep it on a trusted LAN, as with the bridge below.
+
+## Fallback: mcp-host-bridge
+
+Use the bridge when the direct path does not work: with an older Claude Desktop
+or macOS, or with an MCP client that sandboxes its connectors so that they reach
+only `127.0.0.1`.
 
 The bridge is a small **UDP relay** that runs as its own service on the
 wsjtx-mcp host, bridges the LAN to loopback, and routes WSJT-X's broadcasts in
 and your control replies back out. WSJT-X's protocol is connectionless and
-*bidirectional*, so this needs a UDP-aware relay — provided by the
+*bidirectional*, so this needs a UDP-aware relay, provided by the
 **[`mcp-host-bridge`](https://github.com/sbrunner-atx/mcp-host-bridge)** tool
 (the same loopback bridge used for fldigi / N3FJP, which gained a UDP mode and a
 built-in `wsjtx` preset in v0.2.0).
 
-## Topology
+### Topology
 
 ```
   remote WSJT-X                  bridge host (Mac)                 wsjtx-mcp
@@ -33,9 +58,9 @@ built-in `wsjtx` preset in v0.2.0).
 - The bridge learns the remote peer from the first datagram and forwards
   everything to wsjtx-mcp on `127.0.0.1:2238`.
 - wsjtx-mcp's control replies go back to the bridge's loopback socket, which sends
-  them on to the remote WSJT-X — exactly the address each datagram came from.
+  them on to the remote WSJT-X, at the address each datagram came from.
 
-## Set it up with mcp-host-bridge
+### Set it up with mcp-host-bridge
 
 Install the bridge (no clone needed):
 
@@ -46,7 +71,7 @@ uvx mcp-host-bridge --help          # or: pipx install mcp-host-bridge
 …or grab a per-OS binary from the
 [mcp-host-bridge releases](https://github.com/sbrunner-atx/mcp-host-bridge/releases).
 
-Then install the persistent `wsjtx` bridge service (cross-platform — launchd on
+Then install the persistent `wsjtx` bridge service (cross-platform: launchd on
 macOS, systemd on Linux, a Scheduled Task on Windows; `netsh portproxy` is
 TCP-only and is skipped for UDP automatically):
 
@@ -62,7 +87,7 @@ mcp-host-bridge uninstall wsjtx    # remove it
 **Critical wsjtx-mcp config for the bridged case:** set
 
 - `WSJTX_HOST=127.0.0.1`
-- **`WSJTX_PORT=2238`** — the bridge's *deliver* port, **not** the default `2237`
+- **`WSJTX_PORT=2238`**: the bridge's *deliver* port, **not** the default `2237`
   (the bridge's own LAN socket occupies `2237` on that host),
 
 and in the remote WSJT-X set **Settings → Reporting → UDP Server** to the bridge
@@ -71,10 +96,10 @@ host's LAN IP, port `2237` (and tick **Accept UDP requests** for control).
 ## Notes
 
 - The bridge uses a **different loopback port** (`2238`) than the LAN port
-  (`2237`) so its LAN socket and wsjtx-mcp's listener don't collide. Only the
+  (`2237`) so its LAN socket and wsjtx-mcp's listener do not collide. Only the
   remote/bridged case uses `2238`.
-- For a **local** WSJT-X (same machine), you don't need the bridge at all — point
-  wsjtx-mcp straight at `127.0.0.1:2237` (the default).
+- For a **local** WSJT-X (same machine), you need neither: point wsjtx-mcp at
+  `127.0.0.1:2237` (the default).
 - Multicast is an alternative to the bridge when every consumer is on the same
   LAN segment: set `WSJTX_MULTICAST` and WSJT-X's UDP Server to the same group.
 - History: earlier wsjtx-mcp builds shipped a standalone `tools/udp_relay.py`;

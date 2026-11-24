@@ -9,7 +9,7 @@ All notable changes to **wsjtx-mcp** are documented here. The format follows
 Documentation only; no code or behavior changes.
 
 ### Changed
-- Claude Desktop now lets connectors reach other computers by their LAN address, and fldigi-mcp and n3fjp-mcp connect directly. The **Listen host** setting, README, `docs/INSTALL.md` and `docs/REMOTE-HOST.md` say so, and say that receiving WSJT-X's UDP directly has not been tested yet. Until it has, a WSJT-X on another computer still goes through the mcp-host-bridge `wsjtx` service.
+- Claude Desktop now lets connectors talk to other computers on the LAN, and fldigi-mcp and n3fjp-mcp connect directly. For a WSJT-X on another computer, the **Listen host** setting, README, `docs/INSTALL.md` and `docs/REMOTE-HOST.md` now say to set Listen host to this computer's LAN address (or `0.0.0.0`) and point WSJT-X's UDP Server at it. The mcp-host-bridge `wsjtx` service is the fallback for an older Claude Desktop or macOS, or a client that sandboxes connectors.
 - `docs/REMOTE-HOST.md` no longer claims that Claude Desktop blocks LAN addresses even with the Local Network permission on.
 - The guide PDF is printed again from ae5vg.com with the same change and wording fixes from a language review (tool names marked as tools, the bridge settings named as they appear in the settings form).
 
